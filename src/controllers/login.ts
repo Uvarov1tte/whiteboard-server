@@ -12,26 +12,9 @@ const { SECRET } = config
 
 loginRouter.post('/', async (req: Request, res: Response) => {
   const { username, password } = req.body
-
-  // const user = await User.findOne({
-  //   where: { username }
-  // })
-  // const passwordCorrect = user === null
-  //   ? false
-  //   : await bcrypt.compare(password, user.passwordHash)
-  // const User = await db.query.users.findFirst();
-  // console.log(db.query)
-
   const user = await db.query.users.findFirst({
     where: eq(username, username)
   })
-
-  // const user = {
-  //   id: 1,
-  //   name: 'test',
-  //   username: 'test',
-  //   password: 'qwerty'
-  // }
 
   const passwordCorrect = user === null
     ? false 
@@ -50,7 +33,6 @@ loginRouter.post('/', async (req: Request, res: Response) => {
   }
 
   const token = jwt.sign(userForToken, SECRET, { algorithm: "HS256", })
-  // const result = await Session.create({ token: token })
   res.status(200).send({
     token: token,
     username: user.username,
