@@ -4,6 +4,7 @@ import loginRouter from "./controllers/login.js";
 import resetRouter from "./controllers/reset.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
+import { socketActions } from "./socket/index.js";
 
 const app = express()
 const httpServer = createServer(app);
@@ -21,8 +22,6 @@ app.get('/', (req: Request, res: Response) => {
     res.status(200).send({ msg: 'hello' })
 })
 
-io.on("connection", (socket) => {
-    console.log("user connected", socket.id)
-})
+io.on("connection", socketActions )
 
 export default httpServer
