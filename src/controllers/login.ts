@@ -7,6 +7,7 @@ import express from "express";
 const loginRouter = express.Router()
 import config from '@/utils/config.js'
 import { db } from '@/db/index.js';
+import { eq } from 'drizzle-orm';
 const { SECRET } = config
 
 loginRouter.post('/', async (req: Request, res: Response) => {
@@ -19,18 +20,22 @@ loginRouter.post('/', async (req: Request, res: Response) => {
   //   ? false
   //   : await bcrypt.compare(password, user.passwordHash)
   // const User = await db.query.users.findFirst();
-  console.log(db.query)
+  // console.log(db.query)
 
-  const user = {
-    id: 1,
-    name: 'test',
-    username: 'test',
-    password: 'qwerty'
-  }
+  const user = await db.query.users.findFirst({
+    where: eq(username, username)
+  })
+
+  // const user = {
+  //   id: 1,
+  //   name: 'test',
+  //   username: 'test',
+  //   password: 'qwerty'
+  // }
 
   const passwordCorrect = user === null
     ? false 
-    : password === user.password
+    : await bcrypt.compare(password, user!.passwordHash)
 
 
   if (!(user && passwordCorrect)) {
