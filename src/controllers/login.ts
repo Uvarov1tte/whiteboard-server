@@ -6,6 +6,7 @@ import type { Request, Response } from 'express';
 import express from "express";
 const loginRouter = express.Router()
 import config from '@/utils/config.js'
+import { db } from '@/db/index.js';
 const { SECRET } = config
 
 loginRouter.post('/', async (req: Request, res: Response) => {
@@ -17,6 +18,8 @@ loginRouter.post('/', async (req: Request, res: Response) => {
   // const passwordCorrect = user === null
   //   ? false
   //   : await bcrypt.compare(password, user.passwordHash)
+  // const User = await db.query.users.findFirst();
+  console.log(db.query)
 
   const user = {
     id: 1,
