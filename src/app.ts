@@ -2,8 +2,15 @@ import type { Request, Response } from "express";
 import express from "express";
 import loginRouter from "./controllers/login.js";
 import resetRouter from "./controllers/reset.js";
+import { createServer } from "http";
+import { Server } from "socket.io";
 
 const app = express()
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+    cors: { origin: 'http://localhost:8000' }
+})
+
 app.use(express.json())
 
 app.use('/login', loginRouter)
@@ -14,4 +21,8 @@ app.get('/', (req: Request, res: Response) => {
     res.status(200).send({ msg: 'hello' })
 })
 
-export default app
+io.on("connection", (socket) => {
+    console.log("user connected", socket.id)
+})
+
+export default httpServer
