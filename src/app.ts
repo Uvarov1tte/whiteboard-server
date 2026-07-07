@@ -5,6 +5,7 @@ import resetRouter from "./controllers/reset.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { socketActions } from "./socket/index.js";
+import cors from 'cors'
 
 const app = express()
 const httpServer = createServer(app);
@@ -13,6 +14,10 @@ const io = new Server(httpServer, {
 })
 
 app.use(express.json())
+const corsOptions = {
+    origin: 'http://localhost:8000',
+};
+app.use(cors(corsOptions))
 
 app.use('/login', loginRouter)
 app.use('/reset', resetRouter)
@@ -22,6 +27,6 @@ app.get('/', (req: Request, res: Response) => {
     res.status(200).send({ msg: 'hello' })
 })
 
-io.on("connection", socketActions )
+io.on("connection", socketActions)
 
 export default httpServer
