@@ -15,6 +15,13 @@
       "when": 1783408344939,
       "tag": "0001_huge_dazzler",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1783428790711,
+      "tag": "0002_colorful_winter_soldier",
+      "breakpoints": true
     }
   ]
 }
