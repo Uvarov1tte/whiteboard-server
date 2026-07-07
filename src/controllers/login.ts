@@ -8,16 +8,18 @@ const loginRouter = express.Router()
 import config from '@/utils/config.js'
 import { db } from '@/db/index.js';
 import { eq } from 'drizzle-orm';
+import { users } from '@/db/schema.js';
 const { SECRET } = config
 
 loginRouter.post('/', async (req: Request, res: Response) => {
   const { username, password } = req.body
+
   const user = await db.query.users.findFirst({
-    where: eq(username, username)
+    where: eq(users.username, username)
   })
 
   const passwordCorrect = user === null
-    ? false 
+    ? false
     : await bcrypt.compare(password, user!.passwordHash)
 
 
@@ -33,6 +35,10 @@ loginRouter.post('/', async (req: Request, res: Response) => {
   }
 
   const token = jwt.sign(userForToken, SECRET, { algorithm: "HS256", })
+  await db.update(users)
+    .set({ token: token })
+    .where(eq(users.username, username))
+
   res.status(200).send({
     token: token,
     username: user.username,

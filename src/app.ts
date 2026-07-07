@@ -1,11 +1,13 @@
 import type { Request, Response } from "express";
 import express from "express";
-import loginRouter from "./controllers/login.js";
-import resetRouter from "./controllers/reset.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { socketActions } from "./socket/index.js";
 import cors from 'cors'
+import loginRouter from "./controllers/login.js";
+import resetRouter from "./controllers/reset.js";
+import sessionRouter from "./controllers/session.js";
+import { tokenExtractor } from "./utils/middleware.js";
 
 const app = express()
 const httpServer = createServer(app);
@@ -21,6 +23,7 @@ app.use(cors(corsOptions))
 
 app.use('/login', loginRouter)
 app.use('/reset', resetRouter)
+app.use('/session', tokenExtractor, sessionRouter)
 
 app.get('/', (req: Request, res: Response) => {
     console.log('hello')

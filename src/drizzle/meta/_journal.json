@@ -8,6 +8,13 @@
       "when": 1783332286604,
       "tag": "0000_milky_justice",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1783408344939,
+      "tag": "0001_huge_dazzler",
+      "breakpoints": true
     }
   ]
 }
