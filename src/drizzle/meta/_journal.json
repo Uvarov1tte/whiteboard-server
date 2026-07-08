@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1783332286604,
-      "tag": "0000_milky_justice",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1783408344939,
-      "tag": "0001_huge_dazzler",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1783428790711,
-      "tag": "0002_colorful_winter_soldier",
+      "when": 1783525243548,
+      "tag": "0000_illegal_barracuda",
       "breakpoints": true
     }
   ]
