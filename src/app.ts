@@ -9,6 +9,7 @@ import resetRouter from "./controllers/reset.js";
 import sessionRouter from "./controllers/session.js";
 import { tokenExtractor } from "./utils/middleware.js";
 import boardRouter from "./controllers/board.js";
+import userRouter from "./controllers/user.js";
 
 const app = express()
 const httpServer = createServer(app);
@@ -26,6 +27,7 @@ app.use('/login', loginRouter)
 app.use('/reset', resetRouter)
 app.use('/session', tokenExtractor, sessionRouter)
 app.use('/board', boardRouter)
+app.use('/user', userRouter)
 
 app.get('/', (req: Request, res: Response) => {
     console.log('hello')
