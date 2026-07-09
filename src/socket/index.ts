@@ -12,7 +12,8 @@ export const socketActions = (socket: Socket) => {
     console.log(addedShapeArr)
     socket.broadcast.emit('receive-shape', shape, addedShapeArr)
   })
-  socket.on('change-shape', (shape) => {
-    socket.broadcast.emit('edit-shape', shape)
+  socket.on('edit-shape', (shape) => {
+    console.log(shape)
+    socket.broadcast.emit('receive-edited-shape', shape)
   })
 }
