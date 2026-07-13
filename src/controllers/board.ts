@@ -40,11 +40,9 @@ boardRouter.post('/', tokenExtractor, async (req: RequestCustom, res: Response) 
     title: req.body.title,
     userId: user!.id,
   }
-  console.log(newBoard)
 
   try {
     const addedBoard = await db.insert(boards).values(newBoard).returning()
-    console.log(addedBoard)
     res.status(200).send(addedBoard)
   } catch (error) {
     console.log(error)

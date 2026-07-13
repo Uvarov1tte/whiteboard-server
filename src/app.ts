@@ -32,7 +32,6 @@ app.use('/user', userRouter)
 app.use('/shape', shapeRouter)
 
 app.get('/', (req: Request, res: Response) => {
-    console.log('hello')
     res.status(200).send({ msg: 'hello' })
 })
 
