@@ -1,5 +1,5 @@
 import { db } from '@/db/index.js';
-import { boards, shapes } from '@/db/schema.js';
+import { boards, shape_lists, shapes } from '@/db/schema.js';
 import { RequestCustom } from '@/types/index.js';
 import { tokenExtractor } from '@/utils/middleware.js';
 import { eq } from 'drizzle-orm';
@@ -49,6 +49,13 @@ boardRouter.post('/', tokenExtractor, async (req: RequestCustom, res: Response) 
     res.sendStatus(400).send({ msg: 'failed request' })
   }
 
+})
+
+boardRouter.post('/:id', tokenExtractor, async (req: RequestCustom, res: Response) => {
+  const id = req.params.id
+  const newShape = await db.insert(shapes).values(req.body).returning()
+  await db.insert(shape_lists).values({ shapeId: newShape[0].id, boardId: Number(id) })
+  res.status(201).send(newShape[0])
 })
 
 export default boardRouter
