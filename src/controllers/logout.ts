@@ -1,5 +1,5 @@
 import type { Response } from 'express';
-import express from "express";
+import express from 'express';
 const logoutRouter = express.Router()
 import { db } from '@/db/index.js';
 import { eq } from 'drizzle-orm';

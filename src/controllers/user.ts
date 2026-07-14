@@ -1,12 +1,12 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import type { Request, Response } from 'express';
-import express from "express";
+import express from 'express';
 const userRouter = express.Router()
 import { db } from '@/db/index.js';
 import { users } from '@/db/schema.js';
 import { eq } from 'drizzle-orm';
-import bcrypt from "bcrypt";
+import bcrypt from 'bcrypt';
 
 userRouter.post('/', async (req: Request, res: Response) => {
   const { name, username, password } = req.body

@@ -1,4 +1,4 @@
-import httpServer from "./app.js";
+import httpServer from './app.js';
 import config from './utils/config.js';
 
 httpServer.listen(config.port, () => {

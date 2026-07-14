@@ -1,10 +1,10 @@
-import { db } from "@/db/index.js";
-import { users } from "@/db/schema.js";
-import bcrypt from "bcrypt";
-import { sql } from "drizzle-orm"
+import { db } from '@/db/index.js';
+import { users } from '@/db/schema.js';
+import bcrypt from 'bcrypt';
+import { sql } from 'drizzle-orm'
 
 import type { Request, Response } from 'express';
-import express from "express";
+import express from 'express';
 const resetRouter = express.Router()
 
 const resetDatabase = async () => {
@@ -22,7 +22,7 @@ const resetDatabase = async () => {
     }
 
   } catch (error) {
-    console.error("Error resetting database:", error);
+    console.error('Error resetting database:', error);
     throw error;
   }
 }

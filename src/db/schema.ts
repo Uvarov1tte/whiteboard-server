@@ -1,37 +1,37 @@
-import { relations } from "drizzle-orm"
-import { pgTable, serial, text, integer, timestamp, pgEnum, jsonb } from "drizzle-orm/pg-core"
+import { relations } from 'drizzle-orm'
+import { pgTable, serial, text, integer, timestamp, pgEnum, jsonb } from 'drizzle-orm/pg-core'
 
-export const shapeTypesEnum = pgEnum("shapes_types", ["rect", "circle"])
+export const shapeTypesEnum = pgEnum('shapes_types', ['rect', 'circle'])
 
-export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
-  username: text("username").notNull().unique(),
-  name: text("name").notNull(),
-  passwordHash: text("password_hash").notNull().default(""),
-  token: text("token")
+export const users = pgTable('users', {
+  id: serial('id').primaryKey(),
+  username: text('username').notNull().unique(),
+  name: text('name').notNull(),
+  passwordHash: text('password_hash').notNull().default(''),
+  token: text('token')
 })
 
-export const boards = pgTable("boards", {
-  id: serial("id").primaryKey(),
-  title: text("title").notNull().default("Untitled board"),
-  userId: integer("user_id").notNull().references(() => users.id),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+export const boards = pgTable('boards', {
+  id: serial('id').primaryKey(),
+  title: text('title').notNull().default('Untitled board'),
+  userId: integer('user_id').notNull().references(() => users.id),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
 
-export const shapes = pgTable("shapes", {
-  id: serial("id").primaryKey(),
-  type: shapeTypesEnum("type").notNull(),
-  data: jsonb("data").notNull(),
-  zIndex: integer("z_index").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+export const shapes = pgTable('shapes', {
+  id: serial('id').primaryKey(),
+  type: shapeTypesEnum('type').notNull(),
+  data: jsonb('data').notNull(),
+  zIndex: integer('z_index').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
 
-export const shape_lists = pgTable("shape_lists", {
-  id: serial("id").primaryKey(),
-  shapeId: integer("shape_id").notNull().references(() => shapes.id),
-  boardId: integer("board_id").notNull().references(() => boards.id),
+export const shape_lists = pgTable('shape_lists', {
+  id: serial('id').primaryKey(),
+  shapeId: integer('shape_id').notNull().references(() => shapes.id),
+  boardId: integer('board_id').notNull().references(() => boards.id),
 })
 
 export const usersRelations = relations(users, ({ many }) => ({

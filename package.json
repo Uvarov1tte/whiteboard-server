@@ -10,7 +10,8 @@
     "dev": "npx tsx watch src/server.ts",
     "start": "node dist/server.js",
     "build": "tsc -p .",
-    "test": "test"
+    "test": "test",
+    "lint": "eslint"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
@@ -23,16 +24,19 @@
     "socket.io": "^4.8.3"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
     "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
     "@types/node": "^26.0.1",
     "dotenv": "^17.4.2",
     "drizzle-kit": "^0.31.10",
-    "eslint": "^10.6.0",
+    "eslint": "^10.7.0",
     "nodemon": "^3.1.14",
     "postgres": "^3.4.9",
     "ts-node": "^10.9.2",
     "tsx": "^4.22.4",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.64.0"
   }
 }

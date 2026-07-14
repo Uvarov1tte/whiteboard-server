@@ -4,7 +4,7 @@ import { RequestCustom } from '@/types/index.js';
 import { tokenExtractor } from '@/utils/middleware.js';
 import { eq } from 'drizzle-orm';
 import type { Request, Response } from 'express';
-import express from "express";
+import express from 'express';
 const boardRouter = express.Router()
 
 boardRouter.get('/', async (req: RequestCustom, res: Response) => {
@@ -23,7 +23,7 @@ boardRouter.get('/:id', async (req: RequestCustom, res: Response) => {
 
   if (result) {
     const shapesArray: any[] = []
-    for (let sh of result.shape_lists) {
+    for (const sh of result.shape_lists) {
       const shape = await db.query.shapes.findFirst({
         where: eq(shapes.id, sh.id)
       })

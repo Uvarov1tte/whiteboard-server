@@ -1,10 +1,10 @@
-import { NextFunction, Response } from "express"
+import { NextFunction, Response } from 'express'
 import jwt from 'jsonwebtoken'
-import config from "./config.js"
-import { eq } from "drizzle-orm"
-import { db } from "@/db/index.js"
-import { users } from "@/db/schema.js"
-import { RequestCustom } from "@/types/index.js"
+import config from './config.js'
+import { eq } from 'drizzle-orm'
+import { db } from '@/db/index.js'
+import { users } from '@/db/schema.js'
+import { RequestCustom } from '@/types/index.js'
 
 export const tokenExtractor = async (req: RequestCustom, res: Response, next: NextFunction) => {
   const authorization = req.get('authorization')

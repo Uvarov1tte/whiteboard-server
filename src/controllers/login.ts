@@ -3,7 +3,7 @@ dotenv.config();
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import type { Request, Response } from 'express';
-import express from "express";
+import express from 'express';
 const loginRouter = express.Router()
 import config from '@/utils/config.js'
 import { db } from '@/db/index.js';
@@ -34,7 +34,7 @@ loginRouter.post('/', async (req: Request, res: Response) => {
     id: user.id,
   }
 
-  const token = jwt.sign(userForToken, SECRET, { algorithm: "HS256", })
+  const token = jwt.sign(userForToken, SECRET, { algorithm: 'HS256', })
   await db.update(users)
     .set({ token: token })
     .where(eq(users.username, username))

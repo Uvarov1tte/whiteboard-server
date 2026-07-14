@@ -1,8 +1,8 @@
-import { Socket } from "socket.io"
+import type { Socket } from 'socket.io'
 
 export const socketActions = (socket: Socket) => {
-  console.log("user connected", socket.id)
-  socket.on("join-room", (room: string, cb: (msg: string) => void) => {
+  console.log('user connected', socket.id)
+  socket.on('join-room', (room: string, cb: (msg: string) => void) => {
     socket.join(room)
     cb(`Joined ${room}`)
   })
