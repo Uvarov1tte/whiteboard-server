@@ -7,7 +7,7 @@ import { users } from '@/db/schema.js';
 import { tokenExtractor } from '@/utils/middleware.js';
 import { RequestCustom } from '@/types/index.js';
 
-logoutRouter.put('/', tokenExtractor, async (req: RequestCustom, res: Response) => {
+logoutRouter.get('/', tokenExtractor, async (req: RequestCustom, res: Response) => {
   const id = req.user?.id
   await db.update(users)
     .set({
