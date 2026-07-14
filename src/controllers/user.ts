@@ -6,10 +6,12 @@ const userRouter = express.Router()
 import { db } from '@/db/index.js';
 import { users } from '@/db/schema.js';
 import { eq } from 'drizzle-orm';
+import bcrypt from "bcrypt";
 
 userRouter.post('/', async (req: Request, res: Response) => {
   const { name, username, password } = req.body
-  const newUser = { name, username, password }
+  const passwordHash = await bcrypt.hash(password, 10)
+  const newUser = { name, username, passwordHash }
   try {
     const insertedUser = await db.insert(users).values({ ...newUser })
       .returning({ id: users.id, name: users.name, username: users.username })
