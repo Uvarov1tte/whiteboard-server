@@ -11,6 +11,7 @@ import { tokenExtractor } from "./utils/middleware.js";
 import boardRouter from "./controllers/board.js";
 import userRouter from "./controllers/user.js";
 import shapeRouter from "./controllers/shape.js";
+import logoutRouter from "./controllers/logout.js";
 
 const app = express()
 const httpServer = createServer(app);
@@ -25,6 +26,7 @@ const corsOptions = {
 app.use(cors(corsOptions))
 
 app.use('/login', loginRouter)
+app.use('/logout', logoutRouter)
 app.use('/reset', resetRouter)
 app.use('/session', tokenExtractor, sessionRouter)
 app.use('/board', boardRouter)
