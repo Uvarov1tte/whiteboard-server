@@ -7,18 +7,25 @@ import { db } from '@/db/index.js';
 import { users } from '@/db/schema.js';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcrypt';
+import { validateRegister } from '@/utils/middleware.js';
+import { RequestCustom } from '@/types/index.js';
 
-userRouter.post('/', async (req: Request, res: Response) => {
-  const { name, username, password } = req.body
-  const passwordHash = await bcrypt.hash(password, 10)
-  const newUser = { name, username, passwordHash }
-  try {
-    const insertedUser = await db.insert(users).values({ ...newUser })
-      .returning({ id: users.id, name: users.name, username: users.username })
-    res.status(201).send(insertedUser)
-  } catch (err) {
-    console.log(err)
-    res.sendStatus(400).send({ msg: 'failed request' })
+userRouter.post('/', validateRegister, async (req: RequestCustom, res: Response) => {
+  if (req.registerData?.message) {
+    res.status(401).send(JSON.parse(req.registerData?.message))
+  } else {
+    const { name, username, password } = req.registerData
+    const passwordHash = await bcrypt.hash(password, 10)
+    const newUser = { name, username, passwordHash }
+    try {
+      const insertedUser = await db.insert(users).values({ ...newUser })
+        .returning({ id: users.id, name: users.name, username: users.username })
+      res.status(201).send(insertedUser)
+    } catch (err) {
+      console.log(err)
+      res.sendStatus(400).send({ msg: 'failed request' })
+    }
+
   }
 })
 

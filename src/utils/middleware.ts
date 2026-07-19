@@ -5,6 +5,7 @@ import { eq } from 'drizzle-orm'
 import { db } from '@/db/index.js'
 import { users } from '@/db/schema.js'
 import { RequestCustom } from '@/types/index.js'
+import { RegisterValidation } from '@/zod/schema.js'
 
 export const tokenExtractor = async (req: RequestCustom, res: Response, next: NextFunction) => {
   const authorization = req.get('authorization')
@@ -33,6 +34,17 @@ export const tokenExtractor = async (req: RequestCustom, res: Response, next: Ne
     }
   } else {
     return res.status(401).json({ error: 'token missing' })
+  }
+  next()
+}
+
+export const validateRegister = async (req: RequestCustom, rex: Response, next: NextFunction) => {
+  const { name, username, password } = req.body
+  const result = RegisterValidation.safeParse({ name, username, password });
+  if (!result.success) {
+    req.registerData = result.error
+  } else {
+    req.registerData = result.data
   }
   next()
 }

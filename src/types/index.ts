@@ -1,5 +1,6 @@
 import { Request } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
+import type { ZodError } from 'zod';
 
 export interface RequestCustom extends Request {
   token?: string,
@@ -10,6 +11,18 @@ export interface RequestCustom extends Request {
     token: string | null,
     id: number
   }
+  registerData?: {
+    username: string,
+    name: string,
+    password: string
+  } | ZodError
+  loginData?: {
+    username: string,
+    password: string
+  } | ZodError
+  newBoardData?: {
+    title: string
+  } | ZodError
 }
 
 
