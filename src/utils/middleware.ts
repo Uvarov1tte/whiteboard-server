@@ -5,7 +5,7 @@ import { eq } from 'drizzle-orm'
 import { db } from '@/db/index.js'
 import { users } from '@/db/schema.js'
 import { RequestCustom } from '@/types/index.js'
-import { RegisterValidation } from '@/zod/schema.js'
+import { BoardValidation, LogInValidation, RegisterValidation } from '@/zod/schema.js'
 
 export const tokenExtractor = async (req: RequestCustom, res: Response, next: NextFunction) => {
   const authorization = req.get('authorization')
@@ -55,9 +55,54 @@ export const validateRegister = async (req: RequestCustom, res: Response, next: 
     }
     // console.log(errorMsg)
 
-    res.status(401).send(errorMsg)
+    res.status(400).send({error: errorMsg})
   } else {
     req.registerData = result.data
+    next()
+  }
+}
+
+export const validateLogin = async (req: RequestCustom, res: Response, next: NextFunction) => {
+  const { username, password } = req.body
+  const result = LogInValidation.safeParse({ username, password });
+  if (!result.success) {
+    const errors = JSON.parse(result.error.message)
+    // console.log(errors)
+    const errorMsg: { [key: string]: string | null } = {
+      username: null,
+      password: null
+    }
+    for (let i of errors) {
+      const path: string = i.path[0]
+      errorMsg[path] = i.message
+    }
+    // console.log(errorMsg)
+
+    res.status(401).send({error: errorMsg})
+  } else {
+    req.loginData = result.data
+    next()
+  }
+}
+
+export const validateNewBoard = async (req: RequestCustom, res: Response, next: NextFunction) => {
+  const { title } = req.body
+  const result = BoardValidation.safeParse({ title });
+  if (!result.success) {
+    const errors = JSON.parse(result.error.message)
+    // console.log(errors)
+    const errorMsg: { [key: string]: string | null } = {
+      title: null,
+    }
+    for (let i of errors) {
+      const path: string = i.path[0]
+      errorMsg[path] = i.message
+    }
+    // console.log(errorMsg)
+
+    res.status(400).send({error: errorMsg})
+  } else {
+    req.newBoardData = result.data
     next()
   }
 }

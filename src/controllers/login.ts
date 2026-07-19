@@ -9,10 +9,12 @@ import config from '@/utils/config.js'
 import { db } from '@/db/index.js';
 import { eq } from 'drizzle-orm';
 import { users } from '@/db/schema.js';
+import { validateLogin } from '@/utils/middleware.js';
+import { RequestCustom } from '@/types/index.js';
 const { SECRET } = config
 
-loginRouter.post('/', async (req: Request, res: Response) => {
-  const { username, password } = req.body
+loginRouter.post('/', validateLogin, async (req: RequestCustom, res: Response) => {
+  const { username, password } = req.loginData!
 
   const user = await db.query.users.findFirst({
     where: eq(users.username, username)

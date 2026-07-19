@@ -1,7 +1,7 @@
 import { db } from '@/db/index.js';
 import { boards, shape_lists, shapes } from '@/db/schema.js';
 import { RequestCustom } from '@/types/index.js';
-import { tokenExtractor } from '@/utils/middleware.js';
+import { tokenExtractor, validateNewBoard } from '@/utils/middleware.js';
 import { eq } from 'drizzle-orm';
 import type { Request, Response } from 'express';
 import express from 'express';
@@ -30,14 +30,14 @@ boardRouter.get('/:id', async (req: RequestCustom, res: Response) => {
       if (shape) shapesArray.push(shape)
     }
     const sortedShapes = shapesArray.sort((a, b) => a.zIndex - b.zIndex)
-    res.status(200).send({ board: result, shapes: sortedShapes})
+    res.status(200).send({ board: result, shapes: sortedShapes })
   }
 })
 
-boardRouter.post('/', tokenExtractor, async (req: RequestCustom, res: Response) => {
+boardRouter.post('/', tokenExtractor, validateNewBoard, async (req: RequestCustom, res: Response) => {
   const user = req.user
   const newBoard = {
-    title: req.body.title,
+    title: req.newBoardData!.title,
     userId: user!.id,
   }
 
