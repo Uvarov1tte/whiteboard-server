@@ -15,14 +15,14 @@ export interface RequestCustom extends Request {
     username: string,
     name: string,
     password: string
-  } | ZodError
+  }
   loginData?: {
     username: string,
     password: string
-  } | ZodError
+  }
   newBoardData?: {
     title: string
-  } | ZodError
+  }
 }
 
 

@@ -38,13 +38,26 @@ export const tokenExtractor = async (req: RequestCustom, res: Response, next: Ne
   next()
 }
 
-export const validateRegister = async (req: RequestCustom, rex: Response, next: NextFunction) => {
+export const validateRegister = async (req: RequestCustom, res: Response, next: NextFunction) => {
   const { name, username, password } = req.body
   const result = RegisterValidation.safeParse({ name, username, password });
   if (!result.success) {
-    req.registerData = result.error
+    const errors = JSON.parse(result.error.message)
+    // console.log(errors)
+    const errorMsg: { [key: string]: string | null } = {
+      name: null,
+      username: null,
+      password: null
+    }
+    for (let i of errors) {
+      const path: string = i.path[0]
+      errorMsg[path] = i.message
+    }
+    // console.log(errorMsg)
+
+    res.status(401).send(errorMsg)
   } else {
     req.registerData = result.data
+    next()
   }
-  next()
 }
