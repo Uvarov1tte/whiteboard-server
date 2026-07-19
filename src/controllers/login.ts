@@ -20,7 +20,7 @@ loginRouter.post('/', validateLogin, async (req: RequestCustom, res: Response) =
     where: eq(users.username, username)
   })
 
-  const passwordCorrect = user === null
+  const passwordCorrect = user === undefined || null
     ? false
     : await bcrypt.compare(password, user!.passwordHash)
 
