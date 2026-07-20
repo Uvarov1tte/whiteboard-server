@@ -2,23 +2,29 @@ import { db } from '@/db/index.js';
 import { boards, shape_lists, shapes } from '@/db/schema.js';
 import { RequestCustom } from '@/types/index.js';
 import { tokenExtractor, validateNewBoard } from '@/utils/middleware.js';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import type { Request, Response } from 'express';
 import express from 'express';
 const boardRouter = express.Router()
 
 boardRouter.get('/', async (req: RequestCustom, res: Response) => {
+  const userId = req.user!.id
   const result = await db.query.boards.findMany({
     // with: { shape_lists: true }
+    where: eq(boards.userId, userId),
   })
   res.status(200).send(result)
 })
 
 boardRouter.get('/:id', async (req: RequestCustom, res: Response) => {
+  const userId = req.user!.id
   const { id } = req.params
   const result = await db.query.boards.findFirst({
-    where: eq(boards.id, Number(id)),
-    with: { shape_lists: true }
+    where: and(
+      eq(boards.id, Number(id)),
+      eq(boards.userId, userId)
+    ),
+    with: { shape_lists: true },
   })
 
   if (result) {
@@ -31,6 +37,8 @@ boardRouter.get('/:id', async (req: RequestCustom, res: Response) => {
     }
     const sortedShapes = shapesArray.sort((a, b) => a.zIndex - b.zIndex)
     res.status(200).send({ board: result, shapes: sortedShapes })
+  } else {
+    res.status(404).send({error: 'board does not exist or unauthorised user'})
   }
 })
 
