@@ -34,8 +34,15 @@ export const shape_lists = pgTable('shape_lists', {
   boardId: integer('board_id').notNull().references(() => boards.id),
 })
 
+export const board_editors = pgTable('board_editors', {
+  id: serial('id').primaryKey(),
+  boardId: integer('board_id').notNull().references(() => boards.id),
+  userId: integer('user_id').notNull().references(() => users.id)
+})
+
 export const usersRelations = relations(users, ({ many }) => ({
-  boards: many(boards)
+  boards: many(boards),
+  board_editors: many(board_editors)
 }))
 
 export const boardsRelations = relations(boards, ({ one, many }) => ({
@@ -43,7 +50,8 @@ export const boardsRelations = relations(boards, ({ one, many }) => ({
     fields: [boards.userId],
     references: [users.id],
   }),
-  shape_lists: many(shape_lists)
+  shape_lists: many(shape_lists),
+  board_editors: many(board_editors)
 }))
 
 export const shapesRelations = relations(shapes, ({ one }) => ({
@@ -59,4 +67,15 @@ export const shapeListsRelations = relations(shape_lists, ({ one }) => ({
     fields: [shape_lists.boardId],
     references: [boards.id],
   }),
+}))
+
+export const boardUsersRelations = relations(board_editors, ({ one, many }) => ({
+  boards: one(boards, {
+    fields: [board_editors.boardId],
+    references: [boards.id],
+  }),
+  users: one(users, {
+    fields: [board_editors.userId],
+    references: [users.id],
+  })
 }))

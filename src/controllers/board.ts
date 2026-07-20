@@ -1,25 +1,47 @@
 import { db } from '@/db/index.js';
-import { boards, shape_lists, shapes } from '@/db/schema.js';
+import { board_editors, boards, shape_lists, shapes } from '@/db/schema.js';
 import { RequestCustom } from '@/types/index.js';
-import { tokenExtractor, validateNewBoard } from '@/utils/middleware.js';
+import { validateNewBoard } from '@/utils/middleware.js';
 import { and, eq } from 'drizzle-orm';
-import type { Request, Response } from 'express';
+import type { Response } from 'express';
 import express from 'express';
 const boardRouter = express.Router()
 
 boardRouter.get('/', async (req: RequestCustom, res: Response) => {
   const userId = req.user!.id
-  const result = await db.query.boards.findMany({
-    // with: { shape_lists: true }
-    where: eq(boards.userId, userId),
+  const editorStatus = await db.query.board_editors.findMany({
+    where: and(
+      eq(board_editors.userId, userId)
+    ),
   })
-  res.status(200).send(result)
+
+  const boardList: number[] = editorStatus.map(e => e.boardId)
+
+  let allBoards: {
+    id: number;
+    title: string;
+    userId: number;
+    createdAt: Date;
+    updatedAt: Date;
+  }[] = []
+  
+  for (let i of boardList) {
+    const result = await db.query.boards.findFirst({
+      // with: { shape_lists: true } 
+      where: eq(boards.id, i),
+    })
+    if (result && !allBoards.includes(result)) {
+      allBoards.push(result)
+    }
+  }
+
+  res.status(200).send(allBoards)
 })
 
 boardRouter.get('/:id', async (req: RequestCustom, res: Response) => {
   const userId = req.user!.id
   const { id } = req.params
-  const result = await db.query.boards.findFirst({
+  const resultBoard = await db.query.boards.findFirst({
     where: and(
       eq(boards.id, Number(id)),
       eq(boards.userId, userId)
@@ -27,18 +49,25 @@ boardRouter.get('/:id', async (req: RequestCustom, res: Response) => {
     with: { shape_lists: true },
   })
 
-  if (result) {
+  const editorStatus = await db.query.board_editors.findFirst({
+    where: and(
+      eq(board_editors.boardId, Number(id)),
+      eq(board_editors.userId, userId)
+    ),
+  })
+
+  if (resultBoard && editorStatus) {
     const shapesArray: any[] = []
-    for (const sh of result.shape_lists) {
+    for (const sh of resultBoard.shape_lists) {
       const shape = await db.query.shapes.findFirst({
         where: eq(shapes.id, sh.id)
       })
       if (shape) shapesArray.push(shape)
     }
     const sortedShapes = shapesArray.sort((a, b) => a.zIndex - b.zIndex)
-    res.status(200).send({ board: result, shapes: sortedShapes })
+    res.status(200).send({ board: resultBoard, shapes: sortedShapes })
   } else {
-    res.status(404).send({error: 'board does not exist or unauthorised user'})
+    res.status(404).send({ error: 'board does not exist or unauthorised user' })
   }
 })
 
@@ -51,6 +80,8 @@ boardRouter.post('/', validateNewBoard, async (req: RequestCustom, res: Response
 
   try {
     const addedBoard = await db.insert(boards).values(newBoard).returning()
+    const newEditor = { userId: user!.id, boardId: addedBoard[0].id }
+    await db.insert(board_editors).values(newEditor)
     res.status(200).send(addedBoard)
   } catch (error) {
     console.log(error)
