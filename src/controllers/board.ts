@@ -24,7 +24,7 @@ boardRouter.get('/', async (req: RequestCustom, res: Response) => {
     createdAt: Date;
     updatedAt: Date;
   }[] = []
-  
+
   for (let i of boardList) {
     const result = await db.query.boards.findFirst({
       // with: { shape_lists: true } 
@@ -91,10 +91,32 @@ boardRouter.post('/', validateNewBoard, async (req: RequestCustom, res: Response
 })
 
 boardRouter.post('/:id', async (req: RequestCustom, res: Response) => {
-  const id = req.params.id
+  const id = Number(req.params.id)
   const newShape = await db.insert(shapes).values(req.body).returning()
-  await db.insert(shape_lists).values({ shapeId: newShape[0].id, boardId: Number(id) })
+  await db.insert(shape_lists).values({ shapeId: newShape[0].id, boardId: id })
   res.status(201).send(newShape[0])
+})
+
+boardRouter.delete('/:id', async (req: RequestCustom, res: Response) => {
+  const id = Number(req.params.id)
+  const user = req.user
+  try {
+    await db.delete(board_editors)
+      .where(
+        eq(board_editors.boardId, id)
+      )
+    await db.delete(boards)
+      .where(
+        and(
+          eq(boards.userId, user!.id),
+          eq(boards.id, id)
+        )
+      )
+    res.status(204).send({ msg: 'deleted' })
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({ msg: 'invalid request' })
+  }
 })
 
 export default boardRouter
