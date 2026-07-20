@@ -29,7 +29,7 @@ app.use('/login', loginRouter)
 app.use('/logout', logoutRouter)
 app.use('/reset', resetRouter)
 app.use('/session', tokenExtractor, sessionRouter)
-app.use('/board', boardRouter)
+app.use('/board', tokenExtractor, boardRouter)
 app.use('/user', userRouter)
 app.use('/shape', shapeRouter)
 

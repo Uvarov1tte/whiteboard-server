@@ -9,7 +9,7 @@ import { BoardValidation, LogInValidation, RegisterValidation } from '@/zod/sche
 
 export const tokenExtractor = async (req: RequestCustom, res: Response, next: NextFunction) => {
   const authorization = req.get('authorization')
-  console.log(authorization)
+  // console.log(authorization)
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     try {
       req.token = authorization.substring(7)

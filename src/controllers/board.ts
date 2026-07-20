@@ -34,7 +34,7 @@ boardRouter.get('/:id', async (req: RequestCustom, res: Response) => {
   }
 })
 
-boardRouter.post('/', tokenExtractor, validateNewBoard, async (req: RequestCustom, res: Response) => {
+boardRouter.post('/', validateNewBoard, async (req: RequestCustom, res: Response) => {
   const user = req.user
   const newBoard = {
     title: req.newBoardData!.title,
@@ -51,7 +51,7 @@ boardRouter.post('/', tokenExtractor, validateNewBoard, async (req: RequestCusto
 
 })
 
-boardRouter.post('/:id', tokenExtractor, async (req: RequestCustom, res: Response) => {
+boardRouter.post('/:id', async (req: RequestCustom, res: Response) => {
   const id = req.params.id
   const newShape = await db.insert(shapes).values(req.body).returning()
   await db.insert(shape_lists).values({ shapeId: newShape[0].id, boardId: Number(id) })
