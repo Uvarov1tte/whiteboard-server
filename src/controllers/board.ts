@@ -1,13 +1,10 @@
 import { db } from '@/db/index.js';
 import { board_editors, boards, shape_lists, shapes } from '@/db/schema.js';
 import { RequestCustom } from '@/types/index.js';
-import { validateNewBoard } from '@/utils/middleware.js';
 import { and, eq } from 'drizzle-orm';
 import type { Response } from 'express';
-import express from 'express';
-const boardRouter = express.Router()
 
-boardRouter.get('/', async (req: RequestCustom, res: Response) => {
+export const getAllBoards = async (req: RequestCustom, res: Response) => {
   const userId = req.user!.id
   const editorStatus = await db.query.board_editors.findMany({
     where: and(
@@ -36,9 +33,9 @@ boardRouter.get('/', async (req: RequestCustom, res: Response) => {
   }
 
   res.status(200).send(allBoards)
-})
+}
 
-boardRouter.get('/:id', async (req: RequestCustom, res: Response) => {
+export const getOneBoard = async (req: RequestCustom, res: Response) => {
   const userId = req.user!.id
   const { id } = req.params
   const resultBoard = await db.query.boards.findFirst({
@@ -69,9 +66,9 @@ boardRouter.get('/:id', async (req: RequestCustom, res: Response) => {
   } else {
     res.status(404).send({ error: 'board does not exist or unauthorised user' })
   }
-})
+}
 
-boardRouter.post('/', validateNewBoard, async (req: RequestCustom, res: Response) => {
+export const addNewBoard = async (req: RequestCustom, res: Response) => {
   const user = req.user
   const newBoard = {
     title: req.newBoardData!.title,
@@ -88,16 +85,16 @@ boardRouter.post('/', validateNewBoard, async (req: RequestCustom, res: Response
     res.sendStatus(400).send({ msg: 'failed request' })
   }
 
-})
+}
 
-boardRouter.post('/:id', async (req: RequestCustom, res: Response) => {
+export const addShapeToBoard = async (req: RequestCustom, res: Response) => {
   const id = Number(req.params.id)
   const newShape = await db.insert(shapes).values(req.body).returning()
   await db.insert(shape_lists).values({ shapeId: newShape[0].id, boardId: id })
   res.status(201).send(newShape[0])
-})
+}
 
-boardRouter.delete('/:id', async (req: RequestCustom, res: Response) => {
+export const deleteBoard = async (req: RequestCustom, res: Response) => {
   const id = Number(req.params.id)
   const user = req.user
   try {
@@ -117,6 +114,4 @@ boardRouter.delete('/:id', async (req: RequestCustom, res: Response) => {
     console.log(error)
     res.status(500).send({ msg: 'invalid request' })
   }
-})
-
-export default boardRouter
+}

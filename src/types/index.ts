@@ -24,33 +24,3 @@ export interface RequestCustom extends Request {
     title: string
   }
 }
-
-
-// export type ShapeType = 'rect' | 'circle' | 'line' | 'txt'
-
-// export interface ShapeObj {
-//   id: number,
-//   type: ShapeType,
-//   data: RectObj | CircObj,
-//   zIndex: number
-// }
-
-// export interface RectObj {
-//   x: number,
-//   y: number,
-//   width: number,
-//   height: number,
-//   // zIndex: number,
-//   fill: string,
-//   // id: string
-// }
-
-// export interface CircObj {
-//   x: number,
-//   y: number,
-//   width: number,
-//   height: number,
-//   // zIndex: number,
-//   fill: string,
-//   // id: string
-// }

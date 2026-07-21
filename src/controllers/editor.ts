@@ -3,10 +3,8 @@ import { board_editors, boards} from '@/db/schema.js';
 import { RequestCustom } from '@/types/index.js';
 import { and, eq } from 'drizzle-orm';
 import type { Response } from 'express';
-import express from 'express';
-const editorRouter = express.Router()
 
-editorRouter.post('/', async (req: RequestCustom, res: Response) => {
+export const addNewEditor = async (req: RequestCustom, res: Response) => {
   const user = req.user
   const newEditor = req.body
   const board = await db.query.boards.findFirst({
@@ -23,9 +21,9 @@ editorRouter.post('/', async (req: RequestCustom, res: Response) => {
     res.sendStatus(400).send({ error: 'invalid board or unauthorized user' })
   }
 
-})
+}
 
-editorRouter.delete('/', async (req: RequestCustom, res: Response) => {
+export const deleteEditor = async (req: RequestCustom, res: Response) => {
   const user = req.user
   const toBeDeleted = req.body
   const board = await db.query.boards.findFirst({
@@ -47,6 +45,4 @@ editorRouter.delete('/', async (req: RequestCustom, res: Response) => {
   } else {
     res.sendStatus(400).send({ error: 'invalid board or unauthorized user' })
   }
-})
-
-export default editorRouter
+}

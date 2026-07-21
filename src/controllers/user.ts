@@ -7,10 +7,9 @@ import { db } from '@/db/index.js';
 import { users } from '@/db/schema.js';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcrypt';
-import { validateRegister } from '@/utils/middleware.js';
 import { RequestCustom } from '@/types/index.js';
 
-userRouter.post('/', validateRegister, async (req: RequestCustom, res: Response) => {
+export const addNewUser = async (req: RequestCustom, res: Response) => {
   const { name, username, password } = req.registerData!
   const passwordHash = await bcrypt.hash(password, 10)
   const newUser = { name, username, passwordHash }
@@ -22,9 +21,9 @@ userRouter.post('/', validateRegister, async (req: RequestCustom, res: Response)
     console.log(err)
     res.sendStatus(400).send({ msg: 'failed request' })
   }
-})
+}
 
-userRouter.get('/:id', async (req: Request, res: Response) => {
+export const getUserById = async (req: Request, res: Response) => {
   const { id } = req.params
   const user = await db.query.users.findFirst({
     where: eq(users.id, Number(id))
@@ -39,7 +38,6 @@ userRouter.get('/:id', async (req: Request, res: Response) => {
   } else {
     res.sendStatus(404).send({ msg: 'not found' })
   }
-
-})
+}
 
 export default userRouter

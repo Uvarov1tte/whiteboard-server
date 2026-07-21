@@ -4,15 +4,15 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { socketActions } from './socket/index.js';
 import cors from 'cors'
-import logInRouter from './controllers/logIn.js';
-import resetRouter from './controllers/reset.js';
-import sessionRouter from './controllers/session.js';
+import logInRouter from '@/routes/logIn.js';
+import resetRouter from '@/routes/reset.js';
+import sessionRouter from '@/routes/session.js';
 import { tokenExtractor } from './utils/middleware.js';
-import boardRouter from './controllers/board.js';
-import userRouter from './controllers/user.js';
-import shapeRouter from './controllers/shape.js';
-import logOutRouter from './controllers/logOut.js';
-import editorRouter from './controllers/editor.js';
+import boardRouter from '@/routes/board.js';
+import userRouter from '@/routes/user.js';
+import shapeRouter from '@/routes/shape.js';
+import logOutRouter from '@/routes/logOut.js';
+import editorRouter from '@/routes/editor.js';
 
 const app = express()
 const httpServer = createServer(app);

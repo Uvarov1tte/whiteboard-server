@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
-import type { Request, Response } from 'express';
+import type { Response } from 'express';
 import express from 'express';
 const logInRouter = express.Router()
 import config from '@/utils/config.js'
