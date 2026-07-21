@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import type { Request, Response } from 'express';
 import express from 'express';
-const loginRouter = express.Router()
+const logInRouter = express.Router()
 import config from '@/utils/config.js'
 import { db } from '@/db/index.js';
 import { eq } from 'drizzle-orm';
@@ -13,8 +13,8 @@ import { validateLogin } from '@/utils/middleware.js';
 import { RequestCustom } from '@/types/index.js';
 const { SECRET } = config
 
-loginRouter.post('/', validateLogin, async (req: RequestCustom, res: Response) => {
-  const { username, password } = req.loginData!
+logInRouter.post('/', validateLogin, async (req: RequestCustom, res: Response) => {
+  const { username, password } = req.logInData!
 
   const user = await db.query.users.findFirst({
     where: eq(users.username, username)
@@ -49,4 +49,4 @@ loginRouter.post('/', validateLogin, async (req: RequestCustom, res: Response) =
   })
 })
 
-export default loginRouter
+export default logInRouter

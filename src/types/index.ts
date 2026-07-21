@@ -16,7 +16,7 @@ export interface RequestCustom extends Request {
     name: string,
     password: string
   }
-  loginData?: {
+  logInData?: {
     username: string,
     password: string
   }

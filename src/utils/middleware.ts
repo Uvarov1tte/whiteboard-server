@@ -55,7 +55,7 @@ export const validateRegister = async (req: RequestCustom, res: Response, next: 
     }
     // console.log(errorMsg)
 
-    res.status(400).send({error: errorMsg})
+    res.status(400).send({ error: errorMsg })
   } else {
     req.registerData = result.data
     next()
@@ -78,9 +78,9 @@ export const validateLogin = async (req: RequestCustom, res: Response, next: Nex
     }
     // console.log(errorMsg)
 
-    res.status(401).send({error: errorMsg})
+    res.status(401).send({ error: errorMsg })
   } else {
-    req.loginData = result.data
+    req.logInData = result.data
     next()
   }
 }
@@ -100,7 +100,7 @@ export const validateNewBoard = async (req: RequestCustom, res: Response, next: 
     }
     // console.log(errorMsg)
 
-    res.status(400).send({error: errorMsg})
+    res.status(400).send({ error: errorMsg })
   } else {
     req.newBoardData = result.data
     next()
