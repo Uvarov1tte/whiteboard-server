@@ -57,7 +57,7 @@ export const getOneBoard = async (req: RequestCustom, res: Response) => {
     const shapesArray: any[] = []
     for (const sh of resultBoard.shape_lists) {
       const shape = await db.query.shapes.findFirst({
-        where: eq(shapes.id, sh.id)
+        where: eq(shapes.id, sh.shapeId)
       })
       if (shape) shapesArray.push(shape)
     }
