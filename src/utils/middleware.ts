@@ -49,7 +49,7 @@ export const validateRegister = async (req: RequestCustom, res: Response, next: 
       username: null,
       password: null
     }
-    for (let i of errors) {
+    for (const i of errors) {
       const path: string = i.path[0]
       errorMsg[path] = i.message
     }
@@ -72,7 +72,7 @@ export const validateLogin = async (req: RequestCustom, res: Response, next: Nex
       username: null,
       password: null
     }
-    for (let i of errors) {
+    for (const i of errors) {
       const path: string = i.path[0]
       errorMsg[path] = i.message
     }
@@ -94,7 +94,7 @@ export const validateNewBoard = async (req: RequestCustom, res: Response, next: 
     const errorMsg: { [key: string]: string | null } = {
       title: null,
     }
-    for (let i of errors) {
+    for (const i of errors) {
       const path: string = i.path[0]
       errorMsg[path] = i.message
     }

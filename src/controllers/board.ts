@@ -14,7 +14,7 @@ export const getAllBoards = async (req: RequestCustom, res: Response) => {
 
   const boardList: number[] = editorStatus.map(e => e.boardId)
 
-  let allBoards: {
+  const allBoards: {
     id: number;
     title: string;
     userId: number;
@@ -22,7 +22,7 @@ export const getAllBoards = async (req: RequestCustom, res: Response) => {
     updatedAt: Date;
   }[] = []
 
-  for (let i of boardList) {
+  for (const i of boardList) {
     const result = await db.query.boards.findFirst({
       // with: { shape_lists: true } 
       where: eq(boards.id, i),
