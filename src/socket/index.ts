@@ -11,9 +11,12 @@ export const socketActions = (socket: Socket) => {
   })
   socket.on('add-shape', async (shape, allShapes, room) => {
     const addedShapeArr = allShapes.concat([shape])
-    socket.to(room).emit('receive-shape', shape, addedShapeArr)
+    socket.to(room).emit('receive-shape', addedShapeArr)
   })
   socket.on('edit-shape', (shape, room) => {
     socket.to(room).emit('receive-edited-shape', shape)
+  })
+  socket.on('delete-shape', (shapeId: number, room: string) => {
+    socket.to(room).emit('receive-deleted-shape', shapeId)
   })
 }
