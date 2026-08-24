@@ -13,7 +13,7 @@ boardRouter.route('/:id')
   .delete(deleteBoard)
 
 boardRouter.route('/:id/editor')
-  .get(getAllEditors)
+  // .get(getAllEditors)
   .post(addNewEditor)
   .delete(deleteEditor)
 

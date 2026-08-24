@@ -41,10 +41,26 @@ export const getOneBoard = async (req: RequestCustom, res: Response) => {
   const resultBoard = await db.query.boards.findFirst({
     where: and(
       eq(boards.id, Number(id)),
-      eq(boards.userId, userId)
     ),
-    with: { shape_lists: true },
+    with: {
+      shape_lists: true,
+      user: {
+        columns: {
+          username: true
+        }
+      },
+      board_editors: {
+        with: {
+          users: {
+            columns: {
+              username: true
+            }
+          }
+        }
+      }
+     },
   })
+  console.log(resultBoard)
 
   const editorStatus = await db.query.board_editors.findFirst({
     where: and(
@@ -137,7 +153,7 @@ export const getAllEditors = async (req: RequestCustom, res: Response) => {
   })
   
   const editorIdList = resultBoard?.board_editors.map(i => i.userId)
-  
+
   if (editorIdList?.includes(userId)) {
     const editorList = resultBoard?.board_editors.map(i => i.users.username)
     res.status(200).send(editorList)
@@ -179,12 +195,16 @@ export const deleteEditor = async (req: RequestCustom, res: Response) => {
     ),
   })
 
-  if (board) {
+  const toDeleteEditor = await db.query.users.findFirst({
+    where: eq(toBeDeleted.username, users.username)
+  })
+
+  if (board && toDeleteEditor) {
     await db.delete(board_editors)
       .where(
         and(
-          eq(board_editors.boardId, toBeDeleted.boardId),
-          eq(board_editors.userId, toBeDeleted.userId)
+          eq(board_editors.boardId, board.id),
+          eq(board_editors.userId, toDeleteEditor.id)
         )
       )
     res.status(204).send({ msg: 'deleted' })
