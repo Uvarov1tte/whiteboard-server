@@ -117,7 +117,33 @@ export const deleteBoard = async (req: RequestCustom, res: Response) => {
 }
 
 export const getAllEditors = async (req: RequestCustom, res: Response) => {
-
+  const userId = req.user!.id
+  const { id } = req.params
+  const resultBoard = await db.query.boards.findFirst({
+    where: and(
+      eq(boards.id, Number(id)),
+    ),
+    with: {
+      board_editors: {
+        with: {
+          users: {
+            columns: {
+              username: true
+            }
+          }
+        }
+      }
+    },
+  })
+  
+  const editorIdList = resultBoard?.board_editors.map(i => i.userId)
+  
+  if (editorIdList?.includes(userId)) {
+    const editorList = resultBoard?.board_editors.map(i => i.users.username)
+    res.status(200).send(editorList)
+  } else {
+    return res.status(401).json({ error: 'unauthorized' })
+  }
 }
 
 export const addNewEditor = async (req: RequestCustom, res: Response) => {
