@@ -15,6 +15,8 @@ boardRouter.route('/:id')
 boardRouter.route('/:id/editor')
   // .get(getAllEditors)
   .post(addNewEditor)
-  .delete(deleteEditor)
+  // .delete(deleteEditor)
+
+boardRouter.delete('/:id/editor/:username', deleteEditor)
 
 export default boardRouter

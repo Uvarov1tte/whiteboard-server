@@ -58,7 +58,7 @@ export const getOneBoard = async (req: RequestCustom, res: Response) => {
           }
         }
       }
-     },
+    },
   })
   console.log(resultBoard)
 
@@ -151,7 +151,7 @@ export const getAllEditors = async (req: RequestCustom, res: Response) => {
       }
     },
   })
-  
+
   const editorIdList = resultBoard?.board_editors.map(i => i.userId)
 
   if (editorIdList?.includes(userId)) {
@@ -187,16 +187,19 @@ export const addNewEditor = async (req: RequestCustom, res: Response) => {
 
 export const deleteEditor = async (req: RequestCustom, res: Response) => {
   const user = req.user
-  const toBeDeleted = req.body
+  console.log(req.params)
+  const id = req.params.id as string
+  const username = req.params.username as string
+
   const board = await db.query.boards.findFirst({
     where: and(
-      eq(boards.id, toBeDeleted.boardId),
+      eq(boards.id, Number(id)),
       eq(boards.userId, user!.id)
     ),
   })
 
   const toDeleteEditor = await db.query.users.findFirst({
-    where: eq(toBeDeleted.username, users.username)
+    where: eq(users.username, username)
   })
 
   if (board && toDeleteEditor) {

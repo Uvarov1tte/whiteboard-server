@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
-import type { ZodError } from 'zod';
+
 
 export interface RequestCustom extends Request {
   token?: string,
