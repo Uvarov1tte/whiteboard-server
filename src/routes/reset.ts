@@ -1,10 +1,10 @@
-import { db } from '@/db/index.js';
-import { users } from '@/db/schema.js';
-import bcrypt from 'bcrypt';
+import { db } from '@/db/index.js'
+import { users } from '@/db/schema.js'
+import bcrypt from 'bcrypt'
 import { sql } from 'drizzle-orm'
 
-import type { Request, Response } from 'express';
-import express from 'express';
+import type { Request, Response } from 'express'
+import express from 'express'
 const resetRouter = express.Router()
 
 const resetDatabase = async () => {
@@ -14,22 +14,23 @@ const resetDatabase = async () => {
             FROM information_schema.tables 
             WHERE table_schema = 'public'
             AND table_type = 'BASE TABLE';
-    `);
+    `)
 
     for (const table of tablesResult.rows || []) {
-      await db.execute(sql`TRUNCATE "${sql.raw(table.table_name)}"  RESTART IDENTITY CASCADE;`);
-      console.log(`Dropped table: ${table.table_name}`);
+      await db.execute(
+        sql`TRUNCATE "${sql.raw(table.table_name)}"  RESTART IDENTITY CASCADE;`,
+      )
+      console.log(`Dropped table: ${table.table_name}`)
     }
-
   } catch (error) {
-    console.error('Error resetting database:', error);
-    throw error;
+    console.error('Error resetting database:', error)
+    throw error
   }
 }
 
 interface newUser {
-  username: string,
-  name: string,
+  username: string
+  name: string
   password: string
 }
 

@@ -5,9 +5,17 @@ import { eq } from 'drizzle-orm'
 import { db } from '@/db/index.js'
 import { users } from '@/db/schema.js'
 import { RequestCustom } from '@/types/index.js'
-import { BoardValidation, LogInValidation, RegisterValidation } from '@/zod/schema.js'
+import {
+  BoardValidation,
+  LogInValidation,
+  RegisterValidation,
+} from '@/zod/schema.js'
 
-export const tokenExtractor = async (req: RequestCustom, res: Response, next: NextFunction) => {
+export const tokenExtractor = async (
+  req: RequestCustom,
+  res: Response,
+  next: NextFunction,
+) => {
   const authorization = req.get('authorization')
   // console.log(authorization)
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
@@ -16,7 +24,7 @@ export const tokenExtractor = async (req: RequestCustom, res: Response, next: Ne
       req.decodedToken = jwt.verify(authorization.substring(7), config.SECRET)
 
       const user = await db.query.users.findFirst({
-        where: eq(users.token, authorization.substring(7))
+        where: eq(users.token, authorization.substring(7)),
       })
 
       if (!user) {
@@ -26,7 +34,7 @@ export const tokenExtractor = async (req: RequestCustom, res: Response, next: Ne
           id: user.id,
           name: user.name,
           username: user.username,
-          token: user.token
+          token: user.token,
         }
       }
     } catch {
@@ -38,16 +46,20 @@ export const tokenExtractor = async (req: RequestCustom, res: Response, next: Ne
   next()
 }
 
-export const validateRegister = async (req: RequestCustom, res: Response, next: NextFunction) => {
+export const validateRegister = async (
+  req: RequestCustom,
+  res: Response,
+  next: NextFunction,
+) => {
   const { name, username, password } = req.body
-  const result = RegisterValidation.safeParse({ name, username, password });
+  const result = RegisterValidation.safeParse({ name, username, password })
   if (!result.success) {
     const errors = JSON.parse(result.error.message)
     // console.log(errors)
     const errorMsg: { [key: string]: string | null } = {
       name: null,
       username: null,
-      password: null
+      password: null,
     }
     for (const i of errors) {
       const path: string = i.path[0]
@@ -62,15 +74,19 @@ export const validateRegister = async (req: RequestCustom, res: Response, next: 
   }
 }
 
-export const validateLogin = async (req: RequestCustom, res: Response, next: NextFunction) => {
+export const validateLogin = async (
+  req: RequestCustom,
+  res: Response,
+  next: NextFunction,
+) => {
   const { username, password } = req.body
-  const result = LogInValidation.safeParse({ username, password });
+  const result = LogInValidation.safeParse({ username, password })
   if (!result.success) {
     const errors = JSON.parse(result.error.message)
     // console.log(errors)
     const errorMsg: { [key: string]: string | null } = {
       username: null,
-      password: null
+      password: null,
     }
     for (const i of errors) {
       const path: string = i.path[0]
@@ -85,9 +101,13 @@ export const validateLogin = async (req: RequestCustom, res: Response, next: Nex
   }
 }
 
-export const validateNewBoard = async (req: RequestCustom, res: Response, next: NextFunction) => {
+export const validateNewBoard = async (
+  req: RequestCustom,
+  res: Response,
+  next: NextFunction,
+) => {
   const { title } = req.body
-  const result = BoardValidation.safeParse({ title });
+  const result = BoardValidation.safeParse({ title })
   if (!result.success) {
     const errors = JSON.parse(result.error.message)
     // console.log(errors)

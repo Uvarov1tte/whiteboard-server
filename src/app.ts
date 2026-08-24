@@ -1,28 +1,28 @@
-import type { Request, Response } from 'express';
-import express from 'express';
-import { createServer } from 'http';
-import { Server } from 'socket.io';
-import { socketActions } from './socket/index.js';
+import type { Request, Response } from 'express'
+import express from 'express'
+import { createServer } from 'http'
+import { Server } from 'socket.io'
+import { socketActions } from './socket/index.js'
 import cors from 'cors'
-import logInRouter from '@/routes/logIn.js';
-import resetRouter from '@/routes/reset.js';
-import sessionRouter from '@/routes/session.js';
-import { tokenExtractor } from './utils/middleware.js';
-import boardRouter from '@/routes/board.js';
-import userRouter from '@/routes/user.js';
-import shapeRouter from '@/routes/shape.js';
-import logOutRouter from '@/routes/logOut.js';
+import logInRouter from '@/routes/logIn.js'
+import resetRouter from '@/routes/reset.js'
+import sessionRouter from '@/routes/session.js'
+import { tokenExtractor } from './utils/middleware.js'
+import boardRouter from '@/routes/board.js'
+import userRouter from '@/routes/user.js'
+import shapeRouter from '@/routes/shape.js'
+import logOutRouter from '@/routes/logOut.js'
 
 const app = express()
-const httpServer = createServer(app);
+const httpServer = createServer(app)
 const io = new Server(httpServer, {
-  cors: { origin: 'http://localhost:8000' }
+  cors: { origin: 'http://localhost:8000' },
 })
 
 app.use(express.json())
 const corsOptions = {
   origin: 'http://localhost:8000',
-};
+}
 app.use(cors(corsOptions))
 
 app.use('/logIn', logInRouter)

@@ -48,12 +48,8 @@
           "name": "boards_user_id_users_id_fk",
           "tableFrom": "boards",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -93,12 +89,8 @@
           "name": "shape_lists_shape_id_shapes_id_fk",
           "tableFrom": "shape_lists",
           "tableTo": "shapes",
-          "columnsFrom": [
-            "shape_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["shape_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         },
@@ -106,12 +98,8 @@
           "name": "shape_lists_board_id_boards_id_fk",
           "tableFrom": "shape_lists",
           "tableTo": "boards",
-          "columnsFrom": [
-            "board_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["board_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -217,9 +205,7 @@
         "users_username_unique": {
           "name": "users_username_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "username"
-          ]
+          "columns": ["username"]
         }
       },
       "policies": {},
@@ -231,10 +217,7 @@
     "public.shapes_types": {
       "name": "shapes_types",
       "schema": "public",
-      "values": [
-        "rect",
-        "circle"
-      ]
+      "values": ["rect", "circle"]
     }
   },
   "schemas": {},

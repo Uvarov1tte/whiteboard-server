@@ -1,20 +1,22 @@
-import dotenv from 'dotenv';
-dotenv.config();
-import type { Request, Response } from 'express';
-import express from 'express';
+import dotenv from 'dotenv'
+dotenv.config()
+import type { Request, Response } from 'express'
+import express from 'express'
 const userRouter = express.Router()
-import { db } from '@/db/index.js';
-import { users } from '@/db/schema.js';
-import { eq } from 'drizzle-orm';
-import bcrypt from 'bcrypt';
-import { RequestCustom } from '@/types/index.js';
+import { db } from '@/db/index.js'
+import { users } from '@/db/schema.js'
+import { eq } from 'drizzle-orm'
+import bcrypt from 'bcrypt'
+import { RequestCustom } from '@/types/index.js'
 
 export const addNewUser = async (req: RequestCustom, res: Response) => {
   const { name, username, password } = req.registerData!
   const passwordHash = await bcrypt.hash(password, 10)
   const newUser = { name, username, passwordHash }
   try {
-    const insertedUser = await db.insert(users).values({ ...newUser })
+    const insertedUser = await db
+      .insert(users)
+      .values({ ...newUser })
       .returning({ id: users.id, name: users.name, username: users.username })
     res.status(201).send(insertedUser)
   } catch (err) {
@@ -26,13 +28,13 @@ export const addNewUser = async (req: RequestCustom, res: Response) => {
 export const getUserById = async (req: Request, res: Response) => {
   const { id } = req.params
   const user = await db.query.users.findFirst({
-    where: eq(users.id, Number(id))
+    where: eq(users.id, Number(id)),
   })
   if (user) {
     const foundUser = {
       id: user.id,
       name: user.name,
-      username: user.username
+      username: user.username,
     }
     res.status(200).send(foundUser)
   } else {
