@@ -12,7 +12,6 @@ import boardRouter from '@/routes/board.js';
 import userRouter from '@/routes/user.js';
 import shapeRouter from '@/routes/shape.js';
 import logOutRouter from '@/routes/logOut.js';
-import editorRouter from '@/routes/editor.js';
 
 const app = express()
 const httpServer = createServer(app);
@@ -33,7 +32,6 @@ app.use('/session', tokenExtractor, sessionRouter)
 app.use('/board', tokenExtractor, boardRouter)
 app.use('/user', userRouter)
 app.use('/shape', shapeRouter)
-app.use('/editor', tokenExtractor, editorRouter)
 
 app.get('/', (req: Request, res: Response) => {
   res.status(200).send({ msg: 'hello' })
